@@ -1,10 +1,13 @@
 ## Project Summary
 
-<p>Artemis Financial is a financial planning firm with a public web interface. The company asked me to modernize a small Spring Boot service so it protects client data in transit and verifies files or other data during transfers. I focused on practical upgrades: I moved secrets and certificate paths out of code, enforced HTTPS/TLS, replaced a plain checksum with `HMAC-SHA-256` so integrity checks are keyed and tamper-resistant, and set modest limits on input size to reduce abuse. These changes matter because secure code protects customers, lowers business risk, and supports compliance especially important for a finance client.</p>
+Artemis Financial is a financial planning firm with a public web interface. The company asked me to modernize a small Spring Boot service so it protects client data in transit and verifies files or other data during transfers. I focused on practical upgrades: I moved secrets and certificate paths out of code, enforced HTTPS/TLS, replaced a plain checksum with `HMAC-SHA-256` so integrity checks are keyed and tamper-resistant, and set modest limits on input size to reduce abuse. These changes matter because secure code protects customers, lowers business risk, and supports compliance — especially important for a finance client.
 
-<p>I followed the Vulnerability Assessment Process flow: identify, assess, mitigate, verify. To add layers of defense I used HTTPS for transport, `HMAC-SHA-256` for authenticated hashing, input validation, and externalized secrets. I verified function by running the app locally and checking the `/hash` endpoint over HTTPS (e.g., https://localhost:8443/hash), and I checked for new risks by scanning dependencies. Tools and habits I will reuse include Java Keytool, Spring Boot SSL config, Java’s crypto APIs, OWASP Dependency-Check, environment variables for secrets, and the Maven Wrapper. For a portfolio, I can show the HMAC controller, the TLS setup, and a short write-up that ties the changes back to the assessment flow.</p>
+I followed the Vulnerability Assessment Process flow: identify, assess, mitigate, verify. To add layers of defense I used HTTPS for transport, `HMAC-SHA-256` for authenticated hashing, input validation, and externalized secrets. I verified function by running the app locally and checking the `/hash` endpoint over HTTPS (e.g., https://localhost:8443/hash), and I checked for new risks by scanning dependencies. Tools and habits I will reuse include Java Keytool, Spring Boot SSL config, Java’s crypto APIs, OWASP Dependency-Check, environment variables for secrets, and the Maven Wrapper. For a portfolio, I can show the HMAC controller, the TLS setup, and a short write-up that ties the changes back to the assessment flow.
 
-'''
+
+### HashController (HMAC-SHA-256)
+
+```java
 package com.snhu.sslserver;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -73,4 +76,4 @@ public class HashController implements InitializingBean {
         return sb.toString();
     }
 }
-'''
+```
